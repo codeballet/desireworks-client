@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Segment, Form, Button } from 'semantic-ui-react';
-import { createGroup } from '../api/groups-api';
+import { createGroupAction } from '../actions';
 
-const CreateGroup = () => {
+const CreateGroup = (props) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [uploadingGroup, setUploadingGroup] = useState(false);
@@ -14,11 +15,10 @@ const CreateGroup = () => {
                 return;
             }
             setUploadingGroup(true)
-            const group = await createGroup({
+            props.createGroupAction({
                 name,
                 description
             });
-            console.log(`Created group: ${group}`);
             alert('Group was created');
         } catch (e) {
             alert(`Could not create group: ${e.message}`);
@@ -58,4 +58,11 @@ const CreateGroup = () => {
 
 };
 
-export default CreateGroup;
+// const mapStateToProps = (state) => {
+//     return { groups: state.groups };
+// }
+
+export default connect(
+    null,
+    { createGroupAction }
+)(CreateGroup);

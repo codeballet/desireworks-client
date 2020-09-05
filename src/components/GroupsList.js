@@ -1,35 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { Segment, Card } from 'semantic-ui-react';
+import { getGroupsAction } from '../actions'
 import Group from './Group';
-import { getGroups } from '../api/groups-api';
 
-const GroupsList = () => {
-    const [groups, setGroups] = useState([]);
+class GroupsList extends React.Component {
+    componentDidMount() {
+        this.props.getGroupsAction();
+    }
 
-    useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const result = await getGroups();
-                setGroups(result);
-            } catch (e) {
-                alert(`Failed to fetch groups: ${e.message}`)
-            }
-        };
-        fetchGroups();
-    }, []);
-
-    const renderedGroups = groups.map((group) => {
-        return <Group key={group.id} group={group} />
-    });
+    renderGroups() {
+        return this.props.groups.map(group => {
+            return <Group key={group.id} group={group} />
+        });
+    }
     
-    return (
-        <Segment>
-            <h1>Groups</h1>
-            <Card.Group>
-                {renderedGroups}
-            </Card.Group>
-        </Segment>
-    );
+    render() {
+        return(
+            <Segment>
+                <h1>Groups</h1>
+                <Card.Group>
+                    {this.renderGroups()}
+                </Card.Group>
+            </Segment>
+        );
+    }
 }
 
-export default GroupsList;
+const mapStateToProps = (state) => {
+    return {
+        groups: state.groups
+    }; 
+}
+
+export default connect(
+    mapStateToProps,
+    { getGroupsAction }
+)(GroupsList);

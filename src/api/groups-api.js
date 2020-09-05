@@ -3,14 +3,20 @@ import { apiEndpoint } from '../config';
 export async function getGroups() {
     console.log('Fetching groups');
 
-    const response = await fetch(`${apiEndpoint}/groups`);
-    const result = await response.json();
+    try {
+        const response = await fetch(`${apiEndpoint}/groups`);
+        const result = await response.json();
+    
+        return result.items;
+    } catch (e) {
+        throw (e);
+    }
 
-    return result.items;
+
 }
 
 export async function createGroup(newGroup) {
-    const reply = await fetch(`${apiEndpoint}/groups`, {
+    const response = await fetch(`${apiEndpoint}/groups`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -20,6 +26,6 @@ export async function createGroup(newGroup) {
             description: newGroup.description
         })
     });
-    const result = await reply.json();
+    const result = await response.json();
     return result.newItem;
 }
