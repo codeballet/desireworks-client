@@ -1,19 +1,18 @@
 import React from 'react';
-import { Container, Grid } from 'semantic-ui-react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
+import Header from './Header';
 import GroupsList from './GroupsList';
 import CreateGroup from './CreateGroup';
 
 export default () => {
     return(
         <Container>
-            <Grid container stackable verticalAlign="middle">
-                <Grid.Row>
-                    <Grid.Column width={16}>
-                        <GroupsList />
-                        <CreateGroup />
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+            <BrowserRouter>
+                <Header />
+                <Route path="/" exact component={GroupsList} />
+                <Route path="/groups/new" component={CreateGroup} />
+            </BrowserRouter>
         </Container>
     );
 };
